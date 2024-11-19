@@ -1,0 +1,3 @@
+[submodule "shopwise"]
+    path = shopwise
+    url = https://github.com/german36-del/Shopwise.git
