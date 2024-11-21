@@ -1,59 +1,77 @@
-import React, { useState } from 'react'
-import { Upload, List, ShoppingCart, Store, ImageIcon, Search } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Image from 'next/image'
+import React, { useState } from 'react';
+import { Upload, List, ShoppingCart, Store, ImageIcon, Search } from 'lucide-react';
+import { Button, Input, Textarea, Card, CardContent, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui";
+import alcampoIcon from './assets/supermarket-icons/alcampo.png';
+import aldiIcon from './assets/supermarket-icons/aldi.png';
+import eroskiIcon from './assets/supermarket-icons/eroski.png';
+import mercadonaIcon from './assets/supermarket-icons/mercadona.png';
+
+// Custom Image component for Vite compatibility
+function Image({ src, alt, width, height, ...props }) {
+  return (
+    <img 
+      src={src} 
+      alt={alt} 
+      width={width} 
+      height={height} 
+      loading="lazy" 
+      {...props} 
+    />
+  );
+}
 
 export default function Component() {
-  const [shoppingList, setShoppingList] = useState('')
-  const [selectedStores, setSelectedStores] = useState([])
-  const [results, setResults] = useState(null)
-  const [similarProducts, setSimilarProducts] = useState([])
+  const [shoppingList, setShoppingList] = useState('');
+  const [selectedStores, setSelectedStores] = useState([]);
+  const [results, setResults] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
 
   const handleFileUpload = (event) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onload = (e) => {
-        const content = e.target?.result
-        setShoppingList(content)
-      }
-      reader.readAsText(file)
+        const content = e.target?.result;
+        setShoppingList(content);
+      };
+      reader.readAsText(file);
     }
-  }
+  };
 
   const toggleStore = (store) => {
-    setSelectedStores(prev => 
+    setSelectedStores(prev =>
       prev.includes(store) ? prev.filter(s => s !== store) : [...prev, store]
-    )
-  }
+    );
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // Simulating API call to backend for web scraping
     setResults({
       supermarket: selectedStores[0] || 'Best Supermarket',
       price: 99.99,
       images: ['/placeholder.svg?height=100&width=100', '/placeholder.svg?height=100&width=100', '/placeholder.svg?height=100&width=100']
-    })
-  }
+    });
+  };
 
   const handleImageSearch = async (e) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
       // Simulating API call to backend for image-based product search
       setSimilarProducts([
         { name: 'Similar Product 1', price: 19.99, image: '/placeholder.svg?height=100&width=100' },
         { name: 'Similar Product 2', price: 24.99, image: '/placeholder.svg?height=100&width=100' },
         { name: 'Similar Product 3', price: 29.99, image: '/placeholder.svg?height=100&width=100' },
-      ])
+      ]);
     }
-  }
+  };
 
-  const stores = ['Walmart', 'Target', 'Costco', 'Kroger']
+  const stores = [
+    { name: 'Alcampo', icon: alcampoIcon },
+    { name: 'Aldi', icon: aldiIcon },
+    { name: 'Eroski', icon: eroskiIcon },
+    { name: 'Mercadona', icon: mercadonaIcon },
+  ];
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -99,14 +117,20 @@ export default function Component() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {stores.map((store) => (
                       <Button
-                        key={store}
+                        key={store.name}
                         type="button"
-                        variant={selectedStores.includes(store) ? "default" : "outline"}
-                        className="flex items-center justify-center gap-2"
-                        onClick={() => toggleStore(store)}
+                        variant={selectedStores.includes(store.name) ? "default" : "outline"}
+                        className="flex items-center justify-center gap-2 p-2 h-auto"
+                        onClick={() => toggleStore(store.name)}
                       >
-                        <Store className="h-4 w-4" />
-                        {store}
+                        <Image 
+                          src={store.icon} 
+                          alt={`${store.name} icon`} 
+                          width={24} 
+                          height={24} 
+                          className="w-6 h-6 object-contain"
+                        />
+                        <span>{store.name}</span>
                       </Button>
                     ))}
                   </div>
@@ -167,5 +191,5 @@ export default function Component() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
