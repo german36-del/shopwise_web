@@ -1,6 +1,7 @@
 # Web UI Shopwise
 
 Coming soon...
+This is my first project in web development, will try my best!
 
 ## ⚠️ Disclaimer
 
